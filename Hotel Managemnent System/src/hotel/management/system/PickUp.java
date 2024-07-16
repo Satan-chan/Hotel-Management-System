@@ -5,26 +5,29 @@
  */
 package hotel.management.system;
 
+
+
 import java.awt.BorderLayout;
 import java.awt.*;
-import java.awt.EventQueue;
 
+import java.sql.*;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import net.proteanit.sql.DbUtils;
+
 import java.awt.Font;
-import java.awt.Image;
-import java.sql.*;	
-import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-public class NewCustomer extends JFrame {
+
+public class PickUp extends JFrame {
 	Connection conn = null;
 	PreparedStatement pst = null;
+	ResultSet rs = null;
 	private JPanel contentPane;
-	private JTextField t1,t2,t3,t4,t5,t6;
-        JComboBox comboBox;
-        JRadioButton r1,r2;
+	private JTable table;
         Choice c1;
+
 	/**
 	 * Launch the application.
 	 */
@@ -32,7 +35,7 @@ public class NewCustomer extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NewCustomer frame = new NewCustomer();
+					PickUp frame = new PickUp();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,174 +43,117 @@ public class NewCustomer extends JFrame {
 			}
 		});
 	}
+	public void close()
+	{
+		this.dispose();
+	}
 
-	public NewCustomer() throws SQLException {
-		
-                setBounds(530, 200, 850, 550);
+	/**
+	 * Create the frame.
+	 * @throws SQLException 
+	 */
+	public PickUp() throws SQLException {
+		//conn = Javaconnect.getDBConnection();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(530, 200, 800, 600);
 		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-                
-                ImageIcon i1  = new ImageIcon(ClassLoader.getSystemResource("hotel/management/system/icons/fifth.png"));
-                Image i3 = i1.getImage().getScaledInstance(300, 400,Image.SCALE_DEFAULT);
-                ImageIcon i2 = new ImageIcon(i3);
-                JLabel l1 = new JLabel(i2);
-                l1.setBounds(480,10,300,500);
-                add(l1);
 		
-		JLabel lblName = new JLabel("NEW CUSTOMER FORM");
-		lblName.setFont(new Font("Yu Mincho", Font.PLAIN, 20));
-		lblName.setBounds(118, 11, 260, 53);
-		contentPane.add(lblName);
-                
-                JLabel lblId = new JLabel("ID :");
-		lblId.setBounds(35, 76, 200, 14);
-		contentPane.add(lblId);
-                
-                comboBox = new JComboBox(new String[] {"Passport", "Aadhar Card", "Voter Id", "Driving license"});
-		comboBox.setBounds(271, 73, 150, 20);
-		contentPane.add(comboBox);
-                
-                JLabel l2 = new JLabel("Number :");
-		l2.setBounds(35, 111, 200, 14);
-		contentPane.add(l2);
-                
-                t1 = new JTextField();
-		t1.setBounds(271, 111, 150, 20);
-		contentPane.add(t1);
-		t1.setColumns(10);
+		JLabel lblPickUpService = new JLabel("Pick Up Service");
+		lblPickUpService.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblPickUpService.setBounds(90, 11, 158, 25);
+		contentPane.add(lblPickUpService);
 		
-		JLabel lblName_1 = new JLabel("Name :");
-		lblName_1.setBounds(35, 151, 200, 14);
-		contentPane.add(lblName_1);
-		
-		t2 = new JTextField();
-		t2.setBounds(271, 151, 150, 20);
-		contentPane.add(t2);
-		t2.setColumns(10);
+		JLabel lblTypeOfCar = new JLabel("Type of Car");
+		lblTypeOfCar.setBounds(32, 97, 89, 14);
+		contentPane.add(lblTypeOfCar);
 
-                
-		JLabel lblGender = new JLabel("Gender :");
-		lblGender.setBounds(35, 191, 200, 14);
-		contentPane.add(lblGender);
-                
-                r1 = new JRadioButton("Male");
-                r1.setFont(new Font("Raleway", Font.BOLD, 14));
-                r1.setBackground(Color.WHITE);
-                r1.setBounds(271, 191, 80, 12);
-                add(r1);
-                
-                r2 = new JRadioButton("Female");
-                r2.setFont(new Font("Raleway", Font.BOLD, 14));
-                r2.setBackground(Color.WHITE);
-                r2.setBounds(350, 191, 100, 12);
-		add(r2);
-                
-		JLabel lblCountry = new JLabel("Country :");
-		lblCountry.setBounds(35, 231, 200, 14);
-		contentPane.add(lblCountry);
 		
-		JLabel lblReserveRoomNumber = new JLabel("Allocated Room Number :");
-		lblReserveRoomNumber.setBounds(35, 274, 200, 14);
-		contentPane.add(lblReserveRoomNumber);
-                
                 c1 = new Choice();
                 try{
                     conn c = new conn();
-                    ResultSet rs = c.s.executeQuery("select * from room");
+                    ResultSet rs = c.s.executeQuery("select * from driver");
                     while(rs.next()){
-                        c1.add(rs.getString("room_number"));    
+                        c1.add(rs.getString("brand"));    
                     }
                 }catch(Exception e){ }
-                c1.setBounds(271, 274, 150, 20);
+                c1.setBounds(123, 94, 150, 25);
 		contentPane.add(c1);
-		
-		JLabel lblCheckInStatus = new JLabel("Checked-In :");
-		lblCheckInStatus.setBounds(35, 316, 200, 14);
-		contentPane.add(lblCheckInStatus);
-		
-		JLabel lblDeposite = new JLabel("Deposit :");
-		lblDeposite.setBounds(35, 359, 200, 14);
-		contentPane.add(lblDeposite);
-		
-		
-		
-		
-		
-		t3 = new JTextField();
-		t3.setBounds(271, 231, 150, 20);
-		contentPane.add(t3);
-		t3.setColumns(10);
-		
-		
-		t5 = new JTextField();
-		t5.setBounds(271, 316, 150, 20);
-		contentPane.add(t5);
-		t5.setColumns(10);
-		
-		t6 = new JTextField();
-		t6.setBounds(271, 359, 150, 20);
-		contentPane.add(t6);
-		t6.setColumns(10);
 
-		JButton btnNewButton = new JButton("Add");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-                            conn c = new conn();
-                            String radio = null;
-                            
-                            if(r1.isSelected()){ 
-                                radio = "Male";
-                            }
-                            else if(r2.isSelected()){ 
-                                radio = "Female";
-                            }
-                            
-                            String s6 = c1.getSelectedItem();
-                          
-                            try{
-	    			
-                                String s1 = (String)comboBox.getSelectedItem(); 
-	    			String s2 =  t1.getText();
-	    			String s3 =  t2.getText();
-                                String s4 =  radio;
-	    			String s5 =  t3.getText();
-	    			String s7 =  t5.getText();
-                                String s8 =  t6.getText();
-                                
-                                String q1 = "insert into customer values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"')";
-                                String q2 = "update room set availability = 'Occupied' where room_number = "+s6;
-                                c.s.executeUpdate(q1);
-                                c.s.executeUpdate(q2);
-	    			
-	    			
-	    			JOptionPane.showMessageDialog(null, "Data Inserted Successfully");
-                                new Reception().setVisible(true);
-                                setVisible(false);
-	    		}catch(SQLException e1){
-	    			System.out.println(e1.getMessage());
-	    		}
-		    		catch(NumberFormatException s){
-		    			JOptionPane.showMessageDialog(null, "Please enter a valid Number");
-			}
+                
+		
+		JLabel lblInfo = new JLabel("Name");
+		lblInfo.setBounds(24, 208, 46, 14);
+		contentPane.add(lblInfo);
+		
+		JButton btnRegister = new JButton("Display");
+		btnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String SQL = "select * from driver where brand = '"+c1.getSelectedItem()+"'";
+				try{
+				
+					conn c = new conn();
+					rs = c.s.executeQuery(SQL);
+					table.setModel(DbUtils.resultSetToTableModel(rs));
+					
+					
+					
+				}catch (SQLException ss)
+				{
+					ss.printStackTrace();
+				}
+				
+				
 			}
 		});
-		btnNewButton.setBounds(100, 430, 120, 30);
-                btnNewButton.setBackground(Color.BLACK);
-                btnNewButton.setForeground(Color.WHITE);
-		contentPane.add(btnNewButton);
+		btnRegister.setBounds(200, 500, 120, 30);
+                btnRegister.setBackground(Color.BLACK);
+                btnRegister.setForeground(Color.WHITE);
+		contentPane.add(btnRegister);
 		
 		JButton btnExit = new JButton("Back");
 		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-                            new Reception().setVisible(true);
-                            setVisible(false);
+			public void actionPerformed(ActionEvent arg0) {
+				new Reception().setVisible(true);
+                                setVisible(false);
 			}
-		}); 
-		btnExit.setBounds(260, 430, 120, 30);
+		});
+		btnExit.setBounds(420, 500, 120, 30);
                 btnExit.setBackground(Color.BLACK);
                 btnExit.setForeground(Color.WHITE);
 		contentPane.add(btnExit);
+		
+		table = new JTable();
+		table.setBounds(0, 233, 800, 250);
+		contentPane.add(table);
+		
+		JLabel lblNewLabel = new JLabel("Age");
+		lblNewLabel.setBounds(165, 208, 46, 14);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblGender = new JLabel("Gender");
+		lblGender.setBounds(264, 208, 46, 14);
+		contentPane.add(lblGender);
+		
+		JLabel lblTypeOfDriver = new JLabel("Company");
+		lblTypeOfDriver.setBounds(366, 208, 80, 14);
+		contentPane.add(lblTypeOfDriver);
+		
+		JLabel lblDateOfThe = new JLabel("Brand");
+		lblDateOfThe.setBounds(486, 208, 105, 14);
+		contentPane.add(lblDateOfThe);
+	
+		JLabel lblAirport = new JLabel("Available");
+		lblAirport.setBounds(600, 208, 86, 14);
+		contentPane.add(lblAirport);
+		
+		JLabel lblAvailable = new JLabel("Location");
+		lblAvailable.setBounds(700, 208, 73, 14);
+		contentPane.add(lblAvailable);
+                
+                
                 
                 getContentPane().setBackground(Color.WHITE);
 	}
